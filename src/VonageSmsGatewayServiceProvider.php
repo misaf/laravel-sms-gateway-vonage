@@ -20,11 +20,11 @@ final class VonageSmsGatewayServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->afterResolving(SmsGatewayManager::class, function (SmsGatewayManager $manager, Application $app): void {
-            $manager->extend('vonage', fn (): VonageDriver => $app->make(VonageDriver::class));
+            $manager->extend('vonage', fn(): VonageDriver => $app->make(VonageDriver::class));
         });
 
         if ($this->app->bound('sms-gateway')) {
-            $this->app->make('sms-gateway')->extend('vonage', fn (): VonageDriver => $this->app->make(VonageDriver::class));
+            $this->app->make('sms-gateway')->extend('vonage', fn(): VonageDriver => $this->app->make(VonageDriver::class));
         }
     }
 }

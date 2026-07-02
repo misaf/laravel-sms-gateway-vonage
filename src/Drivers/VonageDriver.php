@@ -24,7 +24,7 @@ final class VonageDriver extends SmsGatewayDriver
         return $request
             ->acceptJson()
             ->withQueryParameters([
-                'api_key' => $this->serviceConfigString('api_key'),
+                'api_key'    => $this->serviceConfigString('api_key'),
                 'api_secret' => $this->serviceConfigString('api_secret'),
             ]);
     }
