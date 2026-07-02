@@ -21,7 +21,7 @@ test('can send SMS via Vonage driver', function (): void {
     $result = SmsGateway::driver()->request()
         ->post('sms/json', [
             'from' => 'Laravel',
-            'to'   => '14155550100',
+            'to' => '14155550100',
             'text' => 'Hello from Vonage',
         ])
         ->json();
@@ -29,12 +29,12 @@ test('can send SMS via Vonage driver', function (): void {
     Http::assertSent(function (Request $request): bool {
         $query = Uri::of($request->url())->query()->all();
 
-        return 'https://rest.nexmo.com/sms/json' === strtok($request->url(), '?')
-            && 'vonage-api-key' === $query['api_key']
-            && 'vonage-api-secret' === $query['api_secret']
-            && 'Laravel' === $request['from']
-            && '14155550100' === $request['to']
-            && 'Hello from Vonage' === $request['text'];
+        return strtok($request->url(), '?') === 'https://rest.nexmo.com/sms/json'
+            && $query['api_key'] === 'vonage-api-key'
+            && $query['api_secret'] === 'vonage-api-secret'
+            && $request['from'] === 'Laravel'
+            && $request['to'] === '14155550100'
+            && $request['text'] === 'Hello from Vonage';
     });
 
     expect($result)->toEqual($response);

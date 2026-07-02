@@ -1,5 +1,6 @@
 <?php
 
 declare(strict_types=1);
+use Misaf\LaravelSmsGatewayVonage\Tests\TestCase;
 
-uses(Misaf\LaravelSmsGatewayVonage\Tests\TestCase::class)->in('Feature');
+uses(TestCase::class)->in('Feature');
