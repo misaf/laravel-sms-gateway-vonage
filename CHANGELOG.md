@@ -2,6 +2,17 @@
 
 All notable changes to `laravel-sms-gateway-vonage` will be documented in this file.
 
+## 3.0.0 - 2026-07-04
+
+<!-- Release notes generated using configuration in .github/release.yml at 6858e39268dfcc76563a4f97053cd4f47a8b9aa4 -->
+
+## What's Changed
+### Changes
+* Prepare Vonage driver for merge by @misaf in https://github.com/misaf/laravel-sms-gateway-vonage/pull/4
+
+
+**Full Changelog**: https://github.com/misaf/laravel-sms-gateway-vonage/compare/v1.0.0...v3.0.0
+
 ## 1.0.0 - 2026-07-03
 
 <!-- Release notes generated using configuration in .github/release.yml at 3a620985ecbcfe6d69c432fce18d1e4648c42ffd -->
