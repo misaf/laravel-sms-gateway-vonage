@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Misaf\LaravelSmsGatewayVonage\Drivers;
 
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Misaf\LaravelSmsGateway\SmsGatewayDriver;
 
 final class VonageDriver extends SmsGatewayDriver
 {
-    protected function driverName(): string
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function send(array $data): Response
     {
-        return 'vonage';
+        return $this->request()->post('sms/json', $data);
     }
 
-    protected function defaultGateway(): string
+    protected function defaultBaseUrl(): string
     {
         return 'https://rest.nexmo.com/';
     }
@@ -23,9 +27,10 @@ final class VonageDriver extends SmsGatewayDriver
     {
         return $request
             ->acceptJson()
+            ->asForm()
             ->withQueryParameters([
-                'api_key'    => $this->serviceConfigString('api_key'),
-                'api_secret' => $this->serviceConfigString('api_secret'),
+                'api_key'    => $this->driverConfig('api_key'),
+                'api_secret' => $this->driverConfig('api_secret'),
             ]);
     }
 }

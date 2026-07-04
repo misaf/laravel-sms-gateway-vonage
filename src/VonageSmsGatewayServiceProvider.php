@@ -5,26 +5,16 @@ declare(strict_types=1);
 namespace Misaf\LaravelSmsGatewayVonage;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 use Misaf\LaravelSmsGateway\SmsGatewayManager;
 use Misaf\LaravelSmsGatewayVonage\Drivers\VonageDriver;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-final class VonageSmsGatewayServiceProvider extends PackageServiceProvider
+final class VonageSmsGatewayServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    public function register(): void
     {
-        $package->name('laravel-sms-gateway-vonage');
-    }
-
-    public function packageRegistered(): void
-    {
-        $this->app->afterResolving(SmsGatewayManager::class, function (SmsGatewayManager $manager, Application $app): void {
-            $manager->extend('vonage', fn(): VonageDriver => $app->make(VonageDriver::class));
+        $this->callAfterResolving(SmsGatewayManager::class, function (SmsGatewayManager $manager): void {
+            $manager->extend('vonage', fn(Application $app): VonageDriver => $app->make(VonageDriver::class));
         });
-
-        if ($this->app->bound('sms-gateway')) {
-            $this->app->make('sms-gateway')->extend('vonage', fn(Application $app): VonageDriver => $app->make(VonageDriver::class));
-        }
     }
 }

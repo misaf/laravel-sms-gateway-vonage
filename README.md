@@ -23,8 +23,19 @@ SMS_GATEWAY_VONAGE_API_SECRET=your-api-secret
 'vonage' => [
     'api_key'    => env('SMS_GATEWAY_VONAGE_APIKEY'),
     'api_secret' => env('SMS_GATEWAY_VONAGE_API_SECRET'),
+    'base_url' => env('SMS_GATEWAY_VONAGE_BASE_URL', 'https://rest.nexmo.com/'),
 ],
 ```
+
+## Driver Behavior
+
+| Option | Value |
+| --- | --- |
+| Driver name | `vonage` |
+| Default base URL | `https://rest.nexmo.com/` |
+| `send()` endpoint | `POST sms/json` |
+| Authentication | `api_key` and `api_secret` query parameters from `services.vonage.api_key` and `services.vonage.api_secret` |
+| Payload | Form data sent directly to Vonage |
 
 ## Usage
 
@@ -32,9 +43,9 @@ SMS_GATEWAY_VONAGE_API_SECRET=your-api-secret
 use Misaf\LaravelSmsGateway\Facade\SmsGateway;
 
 $response = SmsGateway::driver('vonage')->send([
-    'to'   => '15551234567',
-    'from' => 'Example',
-    'text' => 'Hello',
+    'from' => 'Laravel',
+    'to'   => '14155550100',
+    'text' => 'Hello from Vonage',
 ]);
 ```
 
