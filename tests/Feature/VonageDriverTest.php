@@ -5,12 +5,12 @@ declare(strict_types=1);
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Uri;
-use Misaf\LaravelSmsGateway\Facade\SmsGateway;
+use Misaf\LaravelSmsGateway\Facades\SmsGateway;
 
 test('can send SMS via Vonage driver', function (): void {
-    config()->set('sms_gateway.default', 'vonage');
-    config()->set('services.vonage.api_key', 'vonage-api-key');
-    config()->set('services.vonage.api_secret', 'vonage-api-secret');
+    config()->set('laravel-sms-gateway.default', 'vonage');
+    config()->set('laravel-sms-gateway-vonage.api_key', 'vonage-api-key');
+    config()->set('laravel-sms-gateway-vonage.api_secret', 'vonage-api-secret');
 
     $response = ['message-count' => '1', 'messages' => [['status' => '0']]];
 
@@ -39,9 +39,9 @@ test('can send SMS via Vonage driver', function (): void {
     expect($result)->toEqual($response);
 });
 
-test('prefers the base URL configured in services over the driver default', function (): void {
-    config()->set('sms_gateway.default', 'vonage');
-    config()->set('services.vonage.base_url', 'https://services-override.example.test/');
+test('prefers the base URL configured in the driver config over the driver default', function (): void {
+    config()->set('laravel-sms-gateway.default', 'vonage');
+    config()->set('laravel-sms-gateway-vonage.base_url', 'https://services-override.example.test/');
 
     Http::fake([
         'https://services-override.example.test/*' => Http::response(['message-count' => '1'], 200),
