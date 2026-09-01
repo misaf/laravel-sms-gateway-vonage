@@ -8,9 +8,9 @@ use Illuminate\Support\Uri;
 use Misaf\LaravelSmsGateway\Facades\SmsGateway;
 
 test('can send SMS via Vonage driver', function (): void {
-    config()->set('laravel-sms-gateway.default', 'vonage');
-    config()->set('laravel-sms-gateway-vonage.api_key', 'vonage-api-key');
-    config()->set('laravel-sms-gateway-vonage.api_secret', 'vonage-api-secret');
+    config()->set('sms-gateway.default', 'vonage');
+    config()->set('sms-gateway-vonage.api_key', 'vonage-api-key');
+    config()->set('sms-gateway-vonage.api_secret', 'vonage-api-secret');
 
     $response = ['message-count' => '1', 'messages' => [['status' => '0']]];
 
@@ -40,8 +40,8 @@ test('can send SMS via Vonage driver', function (): void {
 });
 
 test('prefers the base URL configured in the driver config over the driver default', function (): void {
-    config()->set('laravel-sms-gateway.default', 'vonage');
-    config()->set('laravel-sms-gateway-vonage.base_url', 'https://services-override.example.test/');
+    config()->set('sms-gateway.default', 'vonage');
+    config()->set('sms-gateway-vonage.base_url', 'https://services-override.example.test/');
 
     Http::fake([
         'https://services-override.example.test/*' => Http::response(['message-count' => '1'], 200),

@@ -1,6 +1,6 @@
 {
     "name": "misaf/laravel-sms-gateway-vonage",
-    "description": "Vonage SMS gateway driver for Laravel.",
+    "description": "Vonage SMS gateway driver for Laravel SMS Gateway.",
     "license": "MIT",
     "type": "library",
     "keywords": [

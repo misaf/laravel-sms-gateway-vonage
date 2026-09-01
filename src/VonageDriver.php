@@ -5,11 +5,24 @@ declare(strict_types=1);
 namespace Misaf\LaravelSmsGatewayVonage;
 
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\Response;
-use Misaf\LaravelSmsGateway\SmsGatewayDriver;
+use Illuminate\Support\Facades\Http;
+use Misaf\LaravelSmsGateway\Contracts\SmsGateway;
+use Misaf\LaravelSmsGateway\Events\SmsSent;
 
-final class VonageDriver extends SmsGatewayDriver
+final class VonageDriver implements SmsGateway
 {
+    private const string DEFAULT_BASE_URL = 'https://rest.nexmo.com/';
+
+    public function __construct(
+        private readonly string $apiKey = '',
+        private readonly string $apiSecret = '',
+        private readonly string $baseUrl = '',
+        private readonly int $timeout = 10,
+        private readonly int $connectTimeout = 5,
+    ) {}
+
     /**
      * @param array<string, mixed> $data
      */
@@ -18,19 +31,21 @@ final class VonageDriver extends SmsGatewayDriver
         return $this->request()->post('sms/json', $data);
     }
 
-    protected function defaultBaseUrl(): string
+    public function request(): PendingRequest
     {
-        return 'https://rest.nexmo.com/';
-    }
-
-    protected function configureRequest(PendingRequest $request): PendingRequest
-    {
-        return $request
+        return Http::baseUrl('' !== $this->baseUrl ? $this->baseUrl : self::DEFAULT_BASE_URL)
+            ->timeout($this->timeout)
+            ->connectTimeout($this->connectTimeout)
             ->acceptJson()
             ->asForm()
             ->withQueryParameters([
-                'api_key'    => $this->driverConfig('api_key'),
-                'api_secret' => $this->driverConfig('api_secret'),
-            ]);
+                'api_key'    => $this->apiKey,
+                'api_secret' => $this->apiSecret,
+            ])
+            ->afterResponse(function (Response $response, Request $request): Response {
+                SmsSent::dispatch('vonage', $request, $response);
+
+                return $response;
+            });
     }
 }
